@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Petrichor — Rainfall</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="app-bar">
+    <span class="logo">Petrichor</span>
+
+    <div class="location-wrap">
+      <input
+        type="text"
+        id="location-input"
+        class="location-input"
+        placeholder="Search suburb or town…"
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Location search"
+        aria-autocomplete="list"
+        aria-controls="suggestions"
+      />
+      <ul id="suggestions" class="suggestions" role="listbox" hidden></ul>
+    </div>
+
+    <div class="year-wrap">
+      <label for="year-select" class="year-label">Year</label>
+      <select id="year-select" class="year-select" disabled>
+        <option>–</option>
+      </select>
+    </div>
+    <span id="obs-strip" class="obs-strip"></span>
+  </header>
+
+  <div class="chart-area">
+    <p id="chart-status" class="chart-status"></p>
+    <div id="canvas-container" class="canvas-container" hidden>
+      <canvas id="rainfall-canvas"></canvas>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

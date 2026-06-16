@@ -1,0 +1,215 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:           #fafaf8;
+  --text:         #1c1c1c;
+  --text-muted:   #6b6b6b;
+  --text-faint:   #aaaaaa;
+  --blue:         #1e3a6e;
+  --blue-mid:     #2d5ba8;
+  --border:       #e0deda;
+  --border-light: #eeede9;
+  --radius:       6px;
+  --font:         -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-serif:   Georgia, "Times New Roman", serif;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── App bar ─────────────────────────────────────────────────────────────── */
+
+.app-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 0.85rem;
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.logo {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--blue);
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Location search ──────────────────────────────────────────────────────── */
+
+/* Mobile: search takes its own full-width row below logo + year */
+.location-wrap {
+  position: relative;
+  flex: 0 0 100%;
+  order: 3;
+}
+
+.location-input {
+  width: 100%;
+  padding: 0.42rem 0.85rem;
+  font-size: 0.875rem;
+  font-family: var(--font);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.location-input:focus     { border-color: var(--blue-mid); }
+.location-input::placeholder { color: var(--text-faint); }
+
+.suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+  list-style: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.suggestion-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-light);
+  gap: 0.5rem;
+  transition: background 0.1s;
+}
+
+.suggestion-item:last-child { border-bottom: none; }
+.suggestion-item:hover      { background: #f0eeea; }
+
+.sug-name { font-weight: 600; }
+
+.sug-meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  background: #f0eeea;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Year selector ──────────────────────────────────────────────────────── */
+
+.year-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+  margin-left: auto; /* push to right of logo on mobile */
+}
+
+.year-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.year-select {
+  padding: 0.38rem 0.55rem;
+  font-size: 0.875rem;
+  font-family: var(--font);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  min-width: 76px;
+  transition: border-color 0.15s;
+}
+
+.year-select:focus    { border-color: var(--blue-mid); }
+.year-select:disabled { opacity: 0.45; cursor: default; }
+
+/* Obs strip — hide on mobile to save space */
+.obs-strip {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  display: none;
+}
+
+/* ── Desktop: single-row app bar ──────────────────────────────────────────── */
+
+@media (min-width: 560px) {
+  .app-bar {
+    height: 50px;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .location-wrap {
+    flex: 1;
+    max-width: 340px;
+    order: 0;
+  }
+
+  .year-wrap { margin-left: 0; }
+
+  .obs-strip { display: block; margin-left: auto; }
+}
+
+/* ── Chart area ─────────────────────────────────────────────────────────── */
+
+.chart-area {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#chart-status:not([hidden]) {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.canvas-container:not([hidden]) {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.canvas-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
