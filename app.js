@@ -221,16 +221,18 @@ class RainfallChart {
       }
     }
 
-    // ── Month labels ───────────────────────────────────────────────────────────
-    const MONTHS       = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    const MONTH_STARTS = [0,31,59,90,120,151,181,212,243,273,304,334];
-    // On narrow screens skip alternate months to avoid crowding
-    const monthStep = narrow ? 2 : 1;
+    // ── Season labels (Southern Hemisphere) ───────────────────────────────────
+    const SEASONS = [
+      { label: "Autumn", doy: 59  },  // 1 Mar
+      { label: "Winter", doy: 151 },  // 1 Jun
+      { label: "Spring", doy: 243 },  // 1 Sep
+      { label: "Summer", doy: 334 },  // 1 Dec
+    ];
     ctx.fillStyle = "rgba(0,0,0,0.32)"; ctx.font = `${narrow ? 9 : 10}px var(--font, sans-serif)`;
     ctx.textAlign = "center"; ctx.textBaseline = "top";
-    for (let i = 0; i < 12; i += monthStep) {
-      const x = xScale(MONTH_STARTS[i]);
-      ctx.fillText(MONTHS[i], x, plotBottom + 5);
+    for (const { label, doy } of SEASONS) {
+      const x = xScale(doy);
+      ctx.fillText(narrow ? label.slice(0, 3) : label, x, plotBottom + 5);
       ctx.strokeStyle = "rgba(0,0,0,0.1)"; ctx.lineWidth = 0.5; ctx.setLineDash([]);
       ctx.beginPath(); ctx.moveTo(x, plotBottom); ctx.lineTo(x, plotBottom + 4); ctx.stroke();
     }
@@ -334,10 +336,9 @@ class RainfallChart {
     }
 
     // ── Last 5 historical year labels ──────────────────────────────────────────
-    if (!narrow) {
+    {
       const recent5 = histYears.slice(-5);
-      ctx.font = `10px ${SERIF}`;
-      ctx.textAlign = "left"; ctx.textBaseline = "middle";
+      ctx.font = `10px ${SERIF}`; ctx.textBaseline = "middle";
       for (const year of recent5) {
         if (year === this.hoverYear) continue;
         const cum     = this.cumByYear.get(year);
@@ -345,7 +346,13 @@ class RainfallChart {
         ctx.fillStyle = dimming
           ? `rgba(60,90,130,${((0.35 + recency * 0.35) * 0.35).toFixed(3)})`
           : `rgba(60,90,130,${(0.35 + recency * 0.35).toFixed(3)})`;
-        ctx.fillText(`${year} · ${Math.round(cum[364])}mm`, xScale(364) + 5, yScale(cum[364]));
+        if (narrow) {
+          ctx.textAlign = "right";
+          ctx.fillText(`${year}`, xScale(364) - 4, yScale(cum[364]));
+        } else {
+          ctx.textAlign = "left";
+          ctx.fillText(`${year} · ${Math.round(cum[364])}mm`, xScale(364) + 5, yScale(cum[364]));
+        }
       }
     }
 
