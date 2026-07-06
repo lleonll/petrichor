@@ -174,8 +174,8 @@ class RainfallChart {
   _layout() {
     const W = this._cssW, H = this._cssH;
     const narrow = W < 500;
-    const mL = narrow ? 38 : 54;
-    const mR = narrow ? 70 : 120; // 120 gives room for the pill label on desktop
+    const mL = narrow ? 34 : 54;
+    const mR = narrow ? 8 : 120; // on narrow: pill overlays chart; on desktop: room for labels
     const mT = 16, mB = narrow ? 28 : 34;
     const plotW = W - mL - mR, plotH = H - mT - mB;
 
